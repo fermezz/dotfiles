@@ -12,27 +12,51 @@ Plug 'tpope/vim-sensible'
 Plug 'https://github.com/tmhedberg/SimpylFold'
 
 " Check your syntax
-Plug 'vim-syntastic/syntastic'
+Plug 'https://github.com/w0rp/ale'
 
 " Making python identation great
 Plug 'vim-scripts/indentpython.vim'
 
+" Checking for pep8 standard
+Plug 'https://github.com/tell-k/vim-autopep8'
+
 " Color scheme plugins
 Plug 'jnurmine/Zenburn'
 Plug 'altercation/vim-colors-solarized'
+Plug 'https://github.com/sheerun/vim-wombat-scheme'
 
 " Powerline plugin
 Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
+" Surround plugin
+Plug 'https://github.com/tpope/vim-surround'
+
+" Commentary plugin
+Plug 'https://github.com/tpope/vim-commentary'
+
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" Text-objects plugins
+Plug 'https://github.com/kana/vim-textobj-user'
+Plug 'https://github.com/bps/vim-textobj-python'
+
+"Debugging pluggin
+Plug 'https://github.com/gotcha/ipdb'
+
 call plug#end()
+
+" Automatic reloading of .vimrc
+autocmd! bufwritepost .vimrc source %
 
 " Leader Mappings
 map <Space> <leader>
 map <Leader>w :update<CR>
 map <Leader>q :qall<CR>
 map <Leader>gs :Gstatus<CR>
+
+" Abbreviation for commands
+ab ip import ipdb; ipdb.set_trace()
 
 let python_highlight_all=1
 syntax on
@@ -60,7 +84,9 @@ set ignorecase smartcase              " Search queries intelligently set case
 set incsearch                         " Show search results as you type
 set timeoutlen=1000 ttimeoutlen=0     " Remove timeout when hitting escape
 set showcmd                           " Show size of visual selection
-:set autochdir                        " Change working directory to the one the present file belongs
+set autochdir                         " Change working directory to the one the present file belongs
+filetype plugin on
+
 
 " Setting up correct python PEP8 identation
 au BufNewFile,BufRead *.py
@@ -97,6 +123,7 @@ set wildignore+=*.so
 set wildignore+=*.zip
 set wildignore+=*/vendor/bundle/*
 set wildignore+=*/node_modules/
+set wildignore+=*.pyc
 
 " Ignoring files in NERDTree
 let NERDTreeIgnore=['\.pyc$', '\~$']
@@ -108,6 +135,7 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 set number            " Enable line numbers
 set scrolloff=5       " Leave 5 lines of buffer when scrolling
 set sidescrolloff=10  " Leave 10 characters of horizontal buffer when scrolling
+set relativenumber    " Displays the relative line number depending on what line you are standing on
 
 "-------------------------------------------------------------------------------
 " Colors & Formatting
@@ -117,7 +145,7 @@ if has('gui_running')
   set background=dark
   colorscheme solarized
 else
-  colorscheme zenburn
+  highlight Normal guibg=black
 endif
 
 call togglebg#map("<F5>")

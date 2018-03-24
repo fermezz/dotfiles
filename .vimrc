@@ -41,9 +41,14 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'https://github.com/kana/vim-textobj-user'
 Plug 'https://github.com/bps/vim-textobj-python'
 
-"Debugging pluggin
+" Debugging plugin
 Plug 'https://github.com/gotcha/ipdb'
 
+" YouCompleteMe plugin
+Plug 'Valloric/YouCompleteMe'
+
+" Smooth scrolling
+Plug 'https://github.com/terryma/vim-smooth-scroll'
 call plug#end()
 
 " Automatic reloading of .vimrc
@@ -84,7 +89,7 @@ set ignorecase smartcase              " Search queries intelligently set case
 set incsearch                         " Show search results as you type
 set timeoutlen=1000 ttimeoutlen=0     " Remove timeout when hitting escape
 set showcmd                           " Show size of visual selection
-set autochdir                         " Change working directory to the one the present file belongs
+" set autochdir                         " Change working directory to the one the present file belongs
 filetype plugin on
 
 
@@ -165,3 +170,9 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
+
+" Smooth scrolling remap
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 3)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 3)<CR>

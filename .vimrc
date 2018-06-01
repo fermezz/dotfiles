@@ -9,46 +9,62 @@ call plug#begin()
 Plug 'tpope/vim-sensible'
 
 " Makes de folding of functions works properly
-Plug 'https://github.com/tmhedberg/SimpylFold'
+Plug 'tmhedberg/SimpylFold'
 
 " Check your syntax
-Plug 'https://github.com/w0rp/ale'
+Plug 'w0rp/ale'
 
 " Making python identation great
 Plug 'vim-scripts/indentpython.vim'
 
 " Checking for pep8 standard
-Plug 'https://github.com/tell-k/vim-autopep8'
+Plug 'tell-k/vim-autopep8'
 
 " Color scheme plugins
 Plug 'jnurmine/Zenburn'
-Plug 'altercation/vim-colors-solarized'
-Plug 'https://github.com/sheerun/vim-wombat-scheme'
+Plug 'sheerun/vim-wombat-scheme'
 
 " Powerline plugin
 Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
 " Surround plugin
-Plug 'https://github.com/tpope/vim-surround'
+Plug 'tpope/vim-surround'
 
 " Commentary plugin
-Plug 'https://github.com/tpope/vim-commentary'
+Plug 'tpope/vim-commentary'
 
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " Text-objects plugins
-Plug 'https://github.com/kana/vim-textobj-user'
-Plug 'https://github.com/bps/vim-textobj-python'
+Plug 'kana/vim-textobj-user'
+Plug 'bps/vim-textobj-python'
 
 " Debugging plugin
-Plug 'https://github.com/gotcha/ipdb'
+Plug 'gotcha/ipdb'
 
 " YouCompleteMe plugin
 Plug 'Valloric/YouCompleteMe'
 
 " Smooth scrolling
-Plug 'https://github.com/terryma/vim-smooth-scroll'
+Plug 'terryma/vim-smooth-scroll'
+
+" Sort motion!
+Plug 'christoomey/vim-sort-motion'
+
+" Ultisnips. Track the engine.
+Plug 'SirVer/ultisnips'
+
+" Ultisnips. Snippets are separated from the engine.
+Plug 'honza/vim-snippets'
+
+" Ripgrep plugin
+Plug 'jremmen/vim-ripgrep'
+
+" FZF
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
 " Automatic reloading of .vimrc
@@ -64,6 +80,7 @@ map <Leader>gs :Gstatus<CR>
 ab ip import ipdb; ipdb.set_trace()
 
 let python_highlight_all=1
+let g:ale_python_pylint_options = '--load-plugins pylint_django'      " Making ale work with pylint-django
 syntax on
 
 set path+=**                          " Adds ** to path so makes a recursive search when find command
@@ -91,6 +108,7 @@ set timeoutlen=1000 ttimeoutlen=0     " Remove timeout when hitting escape
 set showcmd                           " Show size of visual selection
 " set autochdir                         " Change working directory to the one the present file belongs
 filetype plugin on
+runtime macros/matchit.vim
 
 
 " Setting up correct python PEP8 identation
@@ -115,6 +133,9 @@ set foldlevel=99
 
 " Enable folding with the spacebar
 nnoremap <space> za
+
+" NerdTreeToggle shortcut
+nnoremap <C-n> :NERDTreeToggle<cr>
 
 " Persistent undo
 set undodir=~/.vim/undo/
@@ -143,27 +164,19 @@ set sidescrolloff=10  " Leave 10 characters of horizontal buffer when scrolling
 set relativenumber    " Displays the relative line number depending on what line you are standing on
 
 "-------------------------------------------------------------------------------
-" Colors & Formatting
+" Colord & Formatting
 "-------------------------------------------------------------------------------
 
 if has('gui_running')
   set background=dark
-  colorscheme solarized
+  colorscheme slate
 else
-  highlight Normal guibg=black
+  colorscheme jellybeans
+  " highlight Normal guibg=black
 endif
-
-call togglebg#map("<F5>")
-set background=dark
 
 " Showcase comments in italics
 highlight Comment cterm=italic gui=italic
-
-" Get off my lawn - helpful when learning Vim :)
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
 
 " Quicker window movement
 nnoremap <C-j> <C-w>j
@@ -172,7 +185,25 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 " Smooth scrolling remap
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
-noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 3)<CR>
-noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 3)<CR>
+noremap <silent> <C-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+noremap <silent> <C-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 0, 3)<CR>
+noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 0, 3)<CR>
+
+" Ultisnips remap
+let g:UltiSnipsExpandTrigger       = '<C-x>'
+let g:UltiSnipsJumpForwardTrigger  = '<C-n>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-p>'
+let g:UltiSnipsListSnippets        = '<C-k>' "List possible snippets based on current file
+
+" --column: Show column number
+" --line-number: Show line number
+" --no-heading: Do not show file headings in results
+" --fixed-strings: Search term as a literal string
+" --ignore-case: Case insensitive search
+" --no-ignore: Do not respect .gitignore, etc...
+" --hidden: Search hidden files and folders
+" --follow: Follow symlinks
+" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+" --color: Search color options
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)

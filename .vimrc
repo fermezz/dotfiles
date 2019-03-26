@@ -12,6 +12,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-scriptease'
 
 Plug 'christoomey/vim-system-copy'
 Plug 'christoomey/vim-sort-motion'
@@ -24,7 +25,7 @@ Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
 
 " On-demand loading
-" Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " YouCompleteMe plugin
 " Plug 'Valloric/YouCompleteMe'
@@ -32,7 +33,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'terryma/vim-smooth-scroll'
 
 " Snippets
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 Plug 'jremmen/vim-ripgrep'
@@ -51,6 +52,9 @@ Plug 'mxw/vim-jsx'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'leafgarland/typescript-vim'
 
+" Vue.js
+Plug 'posva/vim-vue'
+
 call plug#end()
 
 " Automatic reloading of .vimrc
@@ -67,6 +71,16 @@ let g:ale_python_pylint_options = '--load-plugins pylint_django'      " Making a
 let g:ale_sign_error = '●'
 let g:ale_sign_warning = '.'
 let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
+" Navigate through errors
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
 syntax on
 
 set path+=**                          " Adds ** to path so makes a recursive search when find command
@@ -139,7 +153,7 @@ set foldmethod=indent
 set foldlevel=99
 
 " NerdTreeToggle shortcut
-" nnoremap <C-n> :NERDTreeToggle<cr>
+nnoremap <C-n> :NERDTreeToggle<cr>
 
 " Ignored files/directories from autocomplete (and CtrlP)
 set wildignore+=*/tmp/*
@@ -197,10 +211,10 @@ noremap <silent> <C-b> :call smooth_scroll#up(&scroll*2, 0, 3)<CR>
 noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 0, 3)<CR>
 
 " Ultisnips remap
-let g:UltiSnipsExpandTrigger       = '<C-x>'
-let g:UltiSnipsJumpForwardTrigger  = '<C-n>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-p>'
-let g:UltiSnipsListSnippets        = '<C-k>' "List possible snippets based on current file
+" let g:UltiSnipsExpandTrigger       = '<C-x>'
+" let g:UltiSnipsJumpForwardTrigger  = '<C-n>'
+" let g:UltiSnipsJumpBackwardTrigger = '<C-p>'
+" let g:UltiSnipsListSnippets        = '<C-k>' "List possible snippets based on current file
 
 " --column: Show column number
 " --line-number: Show line number
@@ -212,7 +226,7 @@ let g:UltiSnipsListSnippets        = '<C-k>' "List possible snippets based on cu
 " --follow: Follow symlinks
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --glob "!tags/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 " Inside tmux
 " command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 " fzf mappings
@@ -231,6 +245,10 @@ nnoremap <silent> <leader>ft :Filetypes<CR>
 nnoremap <silent> <leader>json :%!python -m json.tool<CR>
 
 
+" Generate local markwdown.
+nnoremap <silent> <leader>vmd :!vmd %<CR>
+
+
 " Cursor shape
 if exists('$TMUX')
     let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
@@ -245,6 +263,11 @@ endif
 nnoremap <Leader><C-z> :!g++ -o  %:r.out % -std=c++11<CR>
 nnoremap <Leader><C-x> :!./%:r.out<CR>
 
-" Execute single test file with pytest
-let service = split(split('%', '/')[0]. '_')[0]
-nnoremap <Leader>tcf :echo service<CR>
+
+function! MultiplyCursor(x)
+  let p = @/
+  s%\d*\%#\d\+%\=submatch(0) * a:x%
+  exe "normal \<C-O>"
+  let @/ = p
+endfunction
+noremap <Leader>m :<C-U>call MultiplyCursor(v:count1)<CR>

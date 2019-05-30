@@ -1,60 +1,44 @@
 "
 " Vim settings for @fermezz
 "
-
-" Settings in this file may depend on plugins, so let's install them first.
-" Not to be confused with the contents of ~/.vim/plugin/* which are
-" configuration options for each plugin and automatically loaded by Vim.
 call plug#begin()
-
 " tpope rocks
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-scriptease'
-
+Plug 'tpope/vim-fugitive'
+"christoomey as well
 Plug 'christoomey/vim-system-copy'
 Plug 'christoomey/vim-sort-motion'
 Plug 'christoomey/vim-tmux-navigator'
-
-Plug 'vim-scripts/indentpython.vim'
-Plug 'tell-k/vim-autopep8'
+" Plug 'vim-scripts/indentpython.vim'
+" Plug 'tell-k/vim-autopep8'
 Plug 'w0rp/ale'
-
 Plug 'vim-airline/vim-airline'
-
+Plug 'vim-airline/vim-airline-themes'
 " On-demand loading
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-
 " YouCompleteMe plugin
 " Plug 'Valloric/YouCompleteMe'
-
 Plug 'terryma/vim-smooth-scroll'
-
 " Snippets
 " Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-
+" Plug 'honza/vim-snippets'
 Plug 'jremmen/vim-ripgrep'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-
 " ctags manager
 Plug 'ludovicchabant/vim-gutentags', { 'branch': 'vim7' }
-
 Plug 'ruanyl/vim-gh-line'
-Plug 'zivyangll/git-blame.vim'
-
 " Languages
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'neovimhaskell/haskell-vim'
-Plug 'leafgarland/typescript-vim'
-
-" Vue.js
-Plug 'posva/vim-vue'
-
+Plug 'sheerun/vim-polyglot'
+" Plug 'pangloss/vim-javascript'
+" Plug 'mxw/vim-jsx'
+" Plug 'neovimhaskell/haskell-vim'
+" Plug 'leafgarland/typescript-vim'
+" Plug 'posva/vim-vue'
 call plug#end()
 
 " Automatic reloading of .vimrc
@@ -66,20 +50,34 @@ let g:mapleader = "\<Space>"
 " Abbreviation for commands
 ab ip import ipdb; ipdb.set_trace(context=10)
 
+hi DiffAdd guifg=NONE ctermfg=NONE guibg=#464632 ctermbg=238 gui=NONE cterm=NONE
+hi DiffChange guifg=NONE ctermfg=NONE guibg=#335261 ctermbg=239 gui=NONE cterm=NONE
+hi DiffDelete guifg=#f43753 ctermfg=203 guibg=#79313c ctermbg=237 gui=NONE cterm=NONE
+hi DiffText guifg=NONE ctermfg=NONE guibg=NONE ctermbg=NONE gui=reverse cterm=reverse
+
 let python_highlight_all=1
-let g:ale_python_pylint_options = '--load-plugins pylint_django'      " Making ale work with pylint-django
-let g:ale_sign_error = '●'
-let g:ale_sign_warning = '.'
+let g:ale_python_pylint_options = '--load-plugins pylint_django' " Making ale work with pylint-django
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+au VimEnter * highlight clear SignColumn
+let g:ale_sign_error = '🔥'
+let g:ale_sign_warning = '🚨'
+let g:ale_sign_warning = 'ℹ'
 let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_echo_msg_error_str = 'Error'
+let g:ale_echo_msg_warning_str = 'Warning'
+let g:ale_echo_msg_format = '[%severity% from %linter%]: %s.'
+let g:ale_set_highlights = 0
 let g:ale_linters = {
-\   'python': ['flake8'],
-\}
+\   'vim': ['vint'],
+\   'markdown': ['mdl'],
+\   'sh': ['shellcheck'],
+\   'html': ['tidy'],
+\   'python': ['flake8']
+\ }
 " Navigate through errors
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <C-w> <Plug>(ale_previous_wrap)
+nmap <silent> <C-e> <Plug>(ale_next_wrap)
 
 syntax on
 
@@ -115,7 +113,7 @@ au BufNewFile,BufRead *.py
     \ set tabstop=4 |
     \ set softtabstop=4 |
     \ set shiftwidth=4 |
-    \ set textwidth=119 |
+    \ set textwidth=120 |
     \ set expandtab |
     \ set autoindent |
     \ set fileformat=unix |
@@ -138,7 +136,10 @@ let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
 let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
 
 " Config airline tabs
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#ale#enabled = 0
+let g:airline_statusline_ontop=1
+let g:airline_theme='base16_default'
 
 " Start terminal mode in insert
 nnoremap <C-t> :vs<CR>:terminal<CR>i
@@ -153,7 +154,8 @@ set foldmethod=indent
 set foldlevel=99
 
 " NerdTreeToggle shortcut
-nnoremap <C-n> :NERDTreeToggle<cr>
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <Leader>n :NERDTreeFind<CR>
 
 " Ignored files/directories from autocomplete (and CtrlP)
 set wildignore+=*/tmp/*
@@ -179,7 +181,7 @@ set relativenumber    " Displays the relative line number depending on what line
 
 " jellybeans rocks.
 set background=dark
-colorscheme jellybeans
+" colorscheme jellybeans
 
 " Showcase comments in italics
 highlight Comment cterm=italic gui=italic term=italic,underline
@@ -226,10 +228,20 @@ noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 0, 3)<CR>
 " --follow: Follow symlinks
 " --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
 " --color: Search color options
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 " Inside tmux
 " command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 " fzf mappings
+command! -bang -nargs=* Find call fzf#vim#grep(
+\   'rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"',
+\   1,
+\   fzf#vim#with_preview(),
+\   <bang>0
+\ )
+command! -bang -nargs=? -complete=dir Files
+\   call fzf#vim#files(<q-args>,
+\   fzf#vim#with_preview(),
+\   <bang>0
+\ )
 let g:fzf_nvim_statusline = 1 " disable statusline overwriting
 
 nnoremap <silent> <leader><space> :Files<CR>
@@ -250,13 +262,13 @@ nnoremap <silent> <leader>vmd :!vmd %<CR>
 
 
 " Cursor shape
-if exists('$TMUX')
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\"
-else
-    let &t_SI = "\e[5 q"
-    let &t_EI = "\e[2 q"
-endif
+" if exists('$TMUX')
+"     let &t_SI = "\e[5 q"
+"     let &t_EI = "\e[2 q"
+" else
+"     let &t_SI = "\e[5 q"
+"     let &t_EI = "\e[2 q"
+" endif
 
 
 " Compile and execute C++
@@ -271,3 +283,45 @@ function! MultiplyCursor(x)
   let @/ = p
 endfunction
 noremap <Leader>m :<C-U>call MultiplyCursor(v:count1)<CR>
+
+
+
+fun! Start()
+    " Don't run if: we have commandline arguments, we don't have an empty
+    " buffer, if we've not invoked as vim or gvim, or if we'e start in insert mode
+    if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
+        return
+    endif
+
+    " Start a new buffer ...
+    enew
+
+    " ... and set some options for it
+    setlocal
+        \ bufhidden=wipe
+        \ buftype=nofile
+        \ nobuflisted
+        \ nocursorcolumn
+        \ nocursorline
+        \ nolist
+        \ nonumber
+        \ noswapfile
+        \ norelativenumber
+
+    " Now we can just write to the buffer, whatever you want.
+    call append('$', "")
+    for line in split(system('fortune -a'), '\n')
+        call append('$', '        ' . l:line)
+    endfor
+
+    " No modifications to this buffer
+    setlocal nomodifiable nomodified
+
+    " When we go to insert mode start a new buffer, and start insert
+    nnoremap <buffer><silent> e :enew<CR>
+    nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
+    nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
+endfun
+
+" Run after doing all the startup stuff
+autocmd VimEnter * call Start()

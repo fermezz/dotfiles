@@ -62,7 +62,7 @@ highlight clear ALEWarningSign
 au VimEnter * highlight clear SignColumn
 let g:ale_sign_error = '🔥'
 let g:ale_sign_warning = '🚨'
-let g:ale_sign_warning = 'ℹ'
+let g:ale_sign_info = 'ℹ'
 let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
 let g:ale_echo_msg_error_str = 'Error'
 let g:ale_echo_msg_warning_str = 'Warning'
@@ -139,7 +139,7 @@ let g:haskell_backpack = 1                " to enable highlighting of backpack k
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 0
 let g:airline_statusline_ontop=1
-let g:airline_theme='base16_default'
+let g:airline_theme='soda'
 
 " Start terminal mode in insert
 nnoremap <C-t> :vs<CR>:terminal<CR>i

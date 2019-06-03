@@ -9,6 +9,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-dadbod'
 "christoomey as well
 Plug 'christoomey/vim-system-copy'
 Plug 'christoomey/vim-sort-motion'
@@ -322,6 +323,17 @@ fun! Start()
     nnoremap <buffer><silent> i :enew <bar> startinsert<CR>
     nnoremap <buffer><silent> o :enew <bar> startinsert<CR>
 endfun
+
+
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+
+call SetupCommandAlias("W","w")
+call SetupCommandAlias("Q","q")
+call SetupCommandAlias("Wq","wq")
 
 " Run after doing all the startup stuff
 autocmd VimEnter * call Start()

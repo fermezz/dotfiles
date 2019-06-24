@@ -135,7 +135,8 @@ function bay() {
             command bay mounts
         fi
         if [[ $# == 2 ]]; then
-            cmd="bay mounts | grep -B 1 '^Mounted.*$2'"
+            cmd="bay mounts | grep -B 1 '^Mounted:'"
+
             eval result=\`${cmd}\`
             echo $result
         fi
@@ -154,3 +155,5 @@ function tmux_session() {
     command tmux new -s core
   fi
 }
+export PATH="/usr/local/opt/curl/bin:$PATH"
+source $HOME/.cargo/env

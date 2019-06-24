@@ -9,7 +9,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-dadbod'
 "christoomey as well
 Plug 'christoomey/vim-system-copy'
 Plug 'christoomey/vim-sort-motion'
@@ -35,11 +34,10 @@ Plug 'ludovicchabant/vim-gutentags', { 'branch': 'vim7' }
 Plug 'ruanyl/vim-gh-line'
 " Languages
 Plug 'sheerun/vim-polyglot'
-" Plug 'pangloss/vim-javascript'
-" Plug 'mxw/vim-jsx'
-" Plug 'neovimhaskell/haskell-vim'
-" Plug 'leafgarland/typescript-vim'
-" Plug 'posva/vim-vue'
+" Debugging rust
+" Plug 'vim-scripts/Conque-GDB'
+Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh \| UpdateRemotePlugins' }
+Plug 'ehamberg/vim-cute-python'
 call plug#end()
 
 " Automatic reloading of .vimrc
@@ -60,7 +58,10 @@ let python_highlight_all=1
 let g:ale_python_pylint_options = '--load-plugins pylint_django' " Making ale work with pylint-django
 highlight clear ALEErrorSign
 highlight clear ALEWarningSign
-au VimEnter * highlight clear SignColumn
+highlight clear ALEWarning
+let g:ale_enabled = 1
+let g:ale_set_signs = 1
+let g:ale_set_balloons = 1
 let g:ale_sign_error = '🔥'
 let g:ale_sign_warning = '🚨'
 let g:ale_sign_info = 'ℹ'
@@ -68,7 +69,7 @@ let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
 let g:ale_echo_msg_error_str = 'Error'
 let g:ale_echo_msg_warning_str = 'Warning'
 let g:ale_echo_msg_format = '[%severity% from %linter%]: %s.'
-let g:ale_set_highlights = 0
+let g:ale_set_highlights = 1
 let g:ale_linters = {
 \   'vim': ['vint'],
 \   'markdown': ['mdl'],
@@ -232,12 +233,14 @@ noremap <silent> <C-f> :call smooth_scroll#down(&scroll*2, 0, 3)<CR>
 " Inside tmux
 " command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 " fzf mappings
+
 command! -bang -nargs=* Find call fzf#vim#grep(
 \   'rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"',
 \   1,
 \   fzf#vim#with_preview(),
 \   <bang>0
 \ )
+
 command! -bang -nargs=? -complete=dir Files
 \   call fzf#vim#files(<q-args>,
 \   fzf#vim#with_preview(),
@@ -284,8 +287,6 @@ function! MultiplyCursor(x)
   let @/ = p
 endfunction
 noremap <Leader>m :<C-U>call MultiplyCursor(v:count1)<CR>
-
-
 
 fun! Start()
     " Don't run if: we have commandline arguments, we don't have an empty
@@ -336,4 +337,5 @@ call SetupCommandAlias("Q","q")
 call SetupCommandAlias("Wq","wq")
 
 " Run after doing all the startup stuff
-autocmd VimEnter * call Start()
+au VimEnter * highlight clear SignColumn
+au VimEnter * call Start()

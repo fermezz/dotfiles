@@ -1,0 +1,14 @@
+alias delete_local_branches="git branch | awk '{for (i = 1; i <= NF; i++){if (\$i != \"master\" && \$i != \"*\") {print \$i}}}' | xargs git branch -D"
+alias dstopall="docker ps -q | xargs docker stop"
+alias k="kubectl"
+
+
+# Tmux
+alias tmux="TERM=screen-256color-bce tmux"
+function tmxm() {
+  command tmux a -t main 2>/dev/null
+  if [[ $? -ne 0 ]]; then
+    command tmux new -s main
+  fi
+}
+

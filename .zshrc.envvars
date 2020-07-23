@@ -1,0 +1,47 @@
+# export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+# export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --glob "!node_modules/*" --glob "!tags/*"'
+export FZF_DEFAULT_OPTS='--height 25%'
+
+
+export EDITOR=/usr/bin/nvim
+
+
+# virtualenv
+export WORKON_HOME=~/.virtualenvs
+
+
+# Locales
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+
+# PATH
+export PATH=${HOME}/.cargo/bin:${HOME}/.local/bin:/usr/local/opt/curl/bin:${HOME}/.cargo/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:/usr/local/opt/curl/bin:${HOME}/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:${HOME}/.fzf/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:${HOME}/.gem/ruby/2.6.0/bin:${HOME}/.gem/ruby/2.6.0/bin
+export PATH="/usr/local/opt/curl/bin:${PATH}"
+export PATH="${PATH}:${HOME}/go/bin"
+export PATH="${HOME}/.local/bin:${PATH}"
+[ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
+
+# Tell npm where to install global packages (so that I don't have to use sudo)
+export PATH="$PATH:${HOME}/.npm-packages/bin"
+
+# Preserve MANPATH if you already defined it somewhere in your config.
+# Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
+export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+
+
+# Tokens
+export GITHUB_TOKEN="8a9fcb1f32c161686c6b3c4ee3c9c388a49d578b"
+export ATLAS_PUBLIC_API_KEY="PZXGZTLR"
+export ATLAS_PRIVATE_API_KEY="9c25065a-60ea-43dd-8c73-86d99cc7317b"
+export ATLAS_PROJECT_ID="5ec35700a8e3b25df9d56d50"
+export ATLAS_CLUSTER_NAME="mutants-mognodb"
+export HONEYCOMB_DATASET="mutants-api"
+
+export ATLAS_MONGODB_ROOT_PASSWORD="bcCigfXkxpkfaV82"

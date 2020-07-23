@@ -37,7 +37,8 @@ Plug 'sheerun/vim-polyglot'
 " Debugging rust
 " Plug 'vim-scripts/Conque-GDB'
 Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh \| UpdateRemotePlugins' }
-Plug 'ehamberg/vim-cute-python'
+
+Plug 'ap/vim-css-color'
 call plug#end()
 
 " Automatic reloading of .vimrc
@@ -71,11 +72,12 @@ let g:ale_echo_msg_warning_str = 'Warning'
 let g:ale_echo_msg_format = '[%severity% from %linter%]: %s.'
 let g:ale_set_highlights = 1
 let g:ale_linters = {
-\   'vim': ['vint'],
-\   'markdown': ['mdl'],
-\   'sh': ['shellcheck'],
+\   'haskell': ['hlint', 'hdevtools', 'hfmt'],
 \   'html': ['tidy'],
-\   'python': ['flake8']
+\   'markdown': ['mdl'],
+\   'python': ['flake8'],
+\   'sh': ['shellcheck'],
+\   'vim': ['vint'],
 \ }
 " Navigate through errors
 nmap <silent> <C-w> <Plug>(ale_previous_wrap)
@@ -266,13 +268,13 @@ nnoremap <silent> <leader>vmd :!vmd %<CR>
 
 
 " Cursor shape
-" if exists('$TMUX')
-"     let &t_SI = "\e[5 q"
-"     let &t_EI = "\e[2 q"
-" else
-"     let &t_SI = "\e[5 q"
-"     let &t_EI = "\e[2 q"
-" endif
+if exists('$TMUX')
+  let &t_SI .= "\ePtmux;\e\033[4 q\e\\"
+  let &t_EI .= "\ePtmux;\e\e[=2c\e\\"
+else
+  let &t_SI .= "\033[4 q"
+  let &t_EI .= "\033[4 q"
+endif
 
 
 " Compile and execute C++

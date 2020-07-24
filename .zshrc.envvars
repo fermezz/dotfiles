@@ -9,7 +9,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --glob
 export FZF_DEFAULT_OPTS='--height 25%'
 
 
-export EDITOR=/usr/bin/nvim
+export EDITOR=$(which nvim)
 
 
 # virtualenv
@@ -34,14 +34,3 @@ export PATH="$PATH:${HOME}/.npm-packages/bin"
 # Preserve MANPATH if you already defined it somewhere in your config.
 # Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
 export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
-
-
-# Tokens
-export GITHUB_TOKEN="8a9fcb1f32c161686c6b3c4ee3c9c388a49d578b"
-export ATLAS_PUBLIC_API_KEY="PZXGZTLR"
-export ATLAS_PRIVATE_API_KEY="9c25065a-60ea-43dd-8c73-86d99cc7317b"
-export ATLAS_PROJECT_ID="5ec35700a8e3b25df9d56d50"
-export ATLAS_CLUSTER_NAME="mutants-mognodb"
-export HONEYCOMB_DATASET="mutants-api"
-
-export ATLAS_MONGODB_ROOT_PASSWORD="bcCigfXkxpkfaV82"

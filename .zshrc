@@ -12,6 +12,7 @@ plugins=(
   git git-flow history node npm kubectl
 )
 
+export ZSH_DISABLE_COMPFIX="true"
 source $ZSH/oh-my-zsh.sh
 
 autoload -U colors
@@ -39,7 +40,7 @@ source ${HOME}/dotfiles/.zshrc.envvars
 # Comment/Uncomment to use pyenv or virtualenvwrapper for Python's virtualenvs.
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
-source /usr/bin/virtualenvwrapper_lazy.sh
+source /usr/local/bin/virtualenvwrapper_lazy.sh
 
 # Set Spaceship ZSH as a prompt
 autoload -U promptinit; promptinit
@@ -47,7 +48,9 @@ autoload -U promptinit; promptinit
 
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 
-source $HOME/.cargo/env
+if [[ -d $HOME/.cargo/env ]]; then
+  source $HOME/.cargo/env
+fi
 
 # added by travis gem
 [ -f ${HOME}/.travis/travis.sh ] && source ${HOME}/.travis/travis.sh

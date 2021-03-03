@@ -12,3 +12,4 @@ function tmxm() {
   fi
 }
 
+alias rebase="git pull --rebase origin develop"

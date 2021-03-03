@@ -28,6 +28,11 @@ export PATH="${PATH}:${HOME}/go/bin"
 export PATH="${HOME}/.local/bin:${PATH}"
 [ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
 
+## Maven
+export PATH="/usr/local/opt/maven@3.2/bin:${PATH}"
+## Java
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_261.jdk/Contents/Home"
+
 # Tell npm where to install global packages (so that I don't have to use sudo)
 export PATH="$PATH:${HOME}/.npm-packages/bin"
 

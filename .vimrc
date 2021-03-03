@@ -8,7 +8,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
 "christoomey as well
 Plug 'christoomey/vim-system-copy'
 Plug 'christoomey/vim-sort-motion'
